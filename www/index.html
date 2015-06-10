@@ -1,0 +1,661 @@
+<html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title>Side Menus</title>
+    <link href="lib/ionic/css/ionic.min.css" rel="stylesheet">
+	<script src="lib/ionic/js/ionic.bundle.min.js"></script>
+    <style>
+	.box1{text-align:center;  background-color:#1D4461 !important; color:#fff;   margin-bottom:15px;}
+	.box2{text-align:center; background-color:#496880; /* background-color:rgba(29,68,97,.8)!important; */color:#fff; margin-bottom:15px;}
+	.box_text1{font-size:85px;}
+	.box_line{ text-align:center; font-size:16px;}
+	.mid{ margin:0 auto; text-align:center; padding:45px 0px; max-height: 255px;}
+	.clear{ clear:both;}
+	.system_text{ text-align:center; color:#000;}
+	.sysmenu { text-align:center; list-style-type:none;padding:1px;margin:15px; }
+	.sysmenu:hover{ background-color:#E6E6E6;cursor:pointer;}
+	.sysmenu a{ text-align:center; list-style-type:none; background-color:#1D4461; padding:5px; color:#FFF; text-decoration:none; outline:none; }
+	.sysmenu1 { text-align:center; list-style-type:none;padding:1px;margin:15px; transitino:all 0.4s ease 0s;}
+	.sysmenu1:hover{ background-color:#E6E6E6; transition:all 0.4s ease 0s;cursor:pointer;}
+	.selected_fan_mode{ background-color:#fff; cursor:pointer;}
+	.sysmenu1 a{ text-align:center; list-style-type:none; background-color:#496880; padding:5px; color:#FFF; text-decoration:none; outline:none;}
+	.full{margin-left: -15px !important; margin-right: -15px !important;}
+	.space{ width:100%; margin-bottom:12px;}	
+	.sched{ background-color:#30BBA8; min-height:50px; margin-bottom:20px;}
+	.w_aline{ text-align:center;padding:10px; color:#fff; height:40px; margin-bottom:5px;}
+	.w_aline:hover{text-align:center;padding:10px; color:#fff; border-bottom:6px solid; transition:all 0.2s ease 0s;cursor:pointer;}
+	.s_aline{ margin-left:69px;padding:10px; color:#fff;text-align:center;}
+	.s_aline:hover{ border-bottom:6px solid; transition:all 0.4s ease 0s; cursor:pointer;}
+	.c_aline{margin-left:30px;padding:10px; color:#fff; text-align:center;}
+	.c_aline:hover{ border-bottom:6px solid; transition:all 0.4s ease 0s; cursor:pointer;}
+	.bg_for6{ background-color:#e6e6e6; text-align:center; padding:2px; height:25px;}
+	.uppic{ width:50px; height:30px; margin:10px; background-image:url(../images/up_pic.png); background-repeat:no-repeat; cursor:pointer;}
+	.uppic:hover{ margin:10px; background-image:url(../images/hoverup_pic.png); background-repeat:no-repeat;}
+	.downpic{ margin:10px;width:50px; height:30px; background-image:url(../images/d_pic.png); background-repeat:no-repeat;cursor:pointer;}
+	.downpic:hover{ margin:10px;width:50px; height:30px; background-image:url(../images/hoverd_pic.png); background-repeat:no-repeat; }
+	.tiv{ border-bottom:6px solid;}
+	</style>
+  </head>
+
+  <body ng-controller="MainCtrl">
+	<ion-nav-bar class="bar-dark">
+      <ion-nav-back-button class="button-icon ion-arrow-left-c">
+      </ion-nav-back-button>
+    </ion-nav-bar>
+             
+    <ion-nav-view></ion-nav-view>
+
+    <script id="sign-in.html" type="text/ng-template">
+      <ion-view view-title="Sign-In">
+        <ion-content>
+          <div class="list"  style="margin-top:80px;">
+            <label class="item item-input">
+              <span class="input-label">Username</span>
+              <input type="text" ng-model="user.username">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Password</span>
+              <input type="password" ng-model="user.password">
+            </label>
+          </div>
+          <div class="padding">
+            <button class="button button-block button-dark" ng-click="signIn(user)">
+              Sign-In
+            </button>
+            <p class="text-center">
+              <a href="#/forgot-password" style="text-decoration:none; color:#000">Forgot password</a>
+            </p>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="forgot-password.html" type="text/ng-template">
+      <ion-view view-title="Forgot Password">
+        <ion-content padding="false">
+          <p>
+			<div class="list" style="margin-top:80px;">
+			<label class="item item-input">
+			  <span class="input-label">Email</span>
+			  <input type="text" ng-model="user.username">
+			</label>
+			
+			</div>
+			<div class="padding">
+			<button class="button button-block button-dark" ng-click="signIn(user)">
+			  Send me reset instructions
+			</button>
+			</div>
+		  </p>
+		  <!--<p>
+			Return to <a href="#/sign-in">Sign-In</a>.
+		  </p>-->
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/event-menu.html" type="text/ng-template">
+      <ion-side-menus enable-menu-with-back-views="false">
+
+        <ion-side-menu-content>
+          <ion-nav-bar class="bar-dark">
+            <ion-nav-back-button>
+            </ion-nav-back-button>
+
+            <ion-nav-buttons side="left">
+              <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+              </button>
+            </ion-nav-buttons>
+          </ion-nav-bar>
+
+          <ion-nav-view name="menuContent"></ion-nav-view>
+        </ion-side-menu-content> 
+
+        <ion-side-menu side="left">
+          <ion-header-bar class="bar-assertive">
+            <h1 class="title">Menus</h1>
+          </ion-header-bar>
+          <ion-content>
+            <ul class="list">
+              <!-- Note each link has the 'menu-close' attribute so the menu auto closes when clicking on one of these links -->
+              <a href="#/event/check-in" class="item item-icon-left" menu-close><i class="icon ion-ios-speedometer"></i>Dashboard</a>
+			   <a href="#/event/messages" class="item  item-icon-left" menu-close><i class="icon ion-email"></i>Messages</a>
+              <a href="#/event/attendees" class="item  item-icon-left" menu-close><i class="icon ion-wifi"></i>Root Control</a>
+			   <a href="#/sign-in" class="item item-icon-left" menu-close><i class="icon ion-log-out"></i>Logout</a>
+            </ul>
+          </ion-content>
+        </ion-side-menu>
+
+      </ion-side-menus>
+    </script>
+
+    <script id="templates/home.html" type="text/ng-template">
+      <ion-view view-title="[ root ]">
+        <ion-content class="padding">
+          <p>Swipe to the right to reveal the left menu.</p>
+          <p>(On desktop click and drag from left to right)</p>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/check-in.html" type="text/ng-template">
+     <ion-view view-title="Dashboard">
+        <ion-content>
+        <div class="row responsive-sm">
+		  <div class="col" style="font-size:94px; text-align:center; background-color:#1D4461; color:#FFF;"><br><br><br>72&deg;<br><br><br><br><p  style="font-size:18px;">CURRENT ZONE TEMP</p><br></div>
+		  <div class="col" style="font-size:94px; text-align:center; background-color:#496880; color:#FFF;"><br><br><br>75&nbsp;<div class="col" style="margin-top:-41px; font-size:94px; text-align:right;"><a class="button icon-up ion-chevron-up button-clear button-dark"></a><br><a class="button icon-down ion-chevron-down button-clear button-dark"></a></div>
+		  		<p  style="font-size:24px;">DESIRED SET POINT</p><br></div>
+		  <div class="col" style=" text-align:center; background-color:#1D4461;">
+		  	<div class="system_text bg_for6"><b>SYSTEM CONTROL</b></div>
+				<div class="mid full">
+					<div class="sys full">
+					<li class="sysmenu" id="SH" onClick="changesystemcontrol('true','H')"><a href="#">HEATING</a></li>
+					<li class="sysmenu" id="SC" onClick="changesystemcontrol('true','C')"><a href="#">COOLING</a></li>            
+					<li class="sysmenu" id="SA" onClick="changesystemcontrol('true','A')"><a href="#">AUTO</a></li>                        
+					<li class="sysmenu" id="SO" onClick="changesystemcontrol('true','O')"><a href="#">OFF</a></li>                                    
+					</div>
+      			</div>
+		  </div>
+		  <div class="col" style="text-align:center; background-color:#496880;">
+		   <div class="system_text bg_for6"><b>FAN CONTROL</b></div>        
+			<div class="mid full">
+				<div class="sys full">
+				<li class="sysmenu1" id="FH" onClick="changefancontrol('true','H')"><a href="#">HIGH</a></li>
+				<li class="sysmenu1" id="FM" onClick="changefancontrol('true','M')"><a href="#">MEDIUM</a></li>            
+				<li class="sysmenu1" id="FL" onClick="changefancontrol('true','L')"><a href="#">LOW</a></li>                        
+				<li class="sysmenu1" id="FO" onClick="changefancontrol('true','O')"><a href="#">OFF</a></li>                                    
+				</div>
+       		</div>
+		  </div>
+		</div>
+		</ion-content>
+      </ion-view>
+    </script>
+    
+    <script id="templates/messages.html" type="text/ng-template">
+		<ion-view view-title="Messages" padding-vertical="10px">
+			<br><br><br><br>
+			<a class="button icon-right  button-block ion-chevron-right button-calm"  href="#/event/receive">Inbox</a>
+			<br><br>
+			<a class="button icon-right  button-block ion-chevron-right button-calm"  href="#/event/sent">Sent</a>
+		</ion-view>
+    </script>
+
+	<script id="templates/receive.html" type="text/ng-template">
+          <ion-view title="Inbox">
+			<ion-header-bar class="bar-subheader item-input-inset">
+			<label class="item-input-wrapper">
+			  <i class="icon ion-ios7-search placeholder-icon"></i>
+			  <input type="search" placeholder="Search" ng-model="msgfilter">
+				</label>
+			  </ion-header-bar>
+
+			<ion-nav-buttons side="right">
+			  <a class="button" ng-click="scrollBottom()">
+				Go To Bottom
+			  </a>
+			</ion-nav-buttons>
+
+			 <ion-content  on-infinite-scroll="loadMore()">
+			<div class="list">
+			  	<div class="row" collection-repeat="data in response | filter:msgfilter">
+					  <div class="col col-35">{{data.msg_remarks}}</div>
+					  <div class="col col-65">{{data.create_dt}}</div>
+				</div>
+			</div>
+			 
+			</ion-content>
+		  </ion-view>
+    </script>
+    
+    <script id="templates/sent.html" type="text/ng-template">
+      <ion-view title="Sent">
+			<ion-header-bar class="bar-subheader item-input-inset">
+			<label class="item-input-wrapper">
+			  <i class="icon ion-ios7-search placeholder-icon"></i>
+			  <input type="search" placeholder="Search" ng-model="msgfilter">
+				</label>
+			  </ion-header-bar>
+
+			<ion-nav-buttons side="right">
+			  <a class="button" ng-click="scrollBottom()">
+				Go To Bottom
+			  </a>
+			</ion-nav-buttons>
+
+			 <ion-content >
+			<div class="list">
+			  	<div class="row" collection-repeat="data in response | filter:msgfilter">
+					  <div class="col col-35">{{data.msg_remarks}}</div>
+					  <div class="col col-65">{{data.create_dt}}</div>
+				</div>
+			</div>
+			</ion-content>
+		  </ion-view>
+    </script>
+    
+	<script id="templates/attendees.html" type="text/ng-template">
+      <ion-view view-title="Root Control">
+        <ion-content>
+		<ion-refresher on-refresh="doRefresh()">
+        </ion-refresher>
+          <div class="list">
+            <div class="item" ng-repeat="group in response"  ng-if="response != 'City'">
+			  <ion-item class="item-stable item" ng-click="toggleGroup(group)" ng-class="{active: isGroupShown(group)}">
+					<i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+					{{group.room_name}}
+			  </ion-item>
+			  <ion-item  class="item-accordion item item-divider" ng-repeat="item in group.sensor_details" ng-show="isGroupShown(group)">
+			  	<a class="item button button-block icon icon-right ion-chevron-right" 
+				ui-sref="eventmenu.detail({sensor_id: item.sensor_id,sensor_type:item.sensor_type,sensor_name:item.sensor_name,schedule_name:item.schedule_name,sensor_type_id:item.sensor_type_id,sensor_status:item.sensor_status})">
+				{{item.sensor_id}}&nbsp;&nbsp;{{item.sensor_name}}</a>
+			</ion-item>
+			</div>
+			<div class="item"  ng-if="response == 'City'">
+				<center>No Device Configured</center>
+			</div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+    
+    <script id="templates/detail.html" type="text/ng-template">
+	<ion-view title="">
+	<br/>
+		<ion-content class="padding">
+		
+		<div class="list">
+			<label class="item item-input">
+				<div class=" input-label" style=" width: 50%;">
+  					<div class="col col-50">
+						<b>Sensor ID</b>
+					</div>
+				</div>
+				{{response}}
+			</label>
+			<label class="item  item-input">
+				<div class=" input-label" style=" width: 50%;">
+  					<div class="col col-50">
+						<b>Device</b>
+					</div>
+				</div>
+				{{response2}}
+			</label>
+			<label class="item  item-input">
+				<div class=" input-label" style=" width: 50%;">
+  					<div class="col col-50">
+						<b>Type</b>
+					</div>
+				</div>
+				{{response1}}
+			</label>
+			<label class="item item-input">
+				<div class=" input-label" style=" width: 50%;">
+  					<div class="col col-50">
+						<b>Schedule</b>
+					</div>
+				</div>
+				{{response3}}
+			</label>
+			<label class="item item-input">
+				<div class=" input-label" style=" width: 50%;">
+  					<div class="col col-50">
+						<b>Status</b>
+					</div>
+				</div>
+			
+				<label class="toggle"  ng-if="response4 == '1'">
+				   <img class="title" ng-if="response5 == 'On'" src="images/sensoricon/rockeron.png">
+				   <img class="title" ng-if="response5 != 'On'" src="images/sensoricon/rockeroff.png">
+				</label>
+				
+				<label class="toggle"  ng-if="response4 == '2'">
+					<input type="checkbox" checked  ng-if="response5 == 'On'">
+					<div class="track" ng-if="response5 == 'On'">
+						<div class="handle"></div>
+					</div>
+					<input type="checkbox" checked  ng-if="response5 != 'On'">
+					<div class="track" ng-if="response5 != 'On'">
+						<div class="handle"></div>
+					</div>
+				</label>
+				
+				<label class="toggle"  ng-if="response4 == '3'">
+				   <img class="title" ng-if="response5 == 'Open'" src="images/sensoricon/wopen.png">
+				   <img class="title" ng-if="response5 != 'Open'" src="images/sensoricon/wclosed.png">
+				</label>
+				
+				<label class="toggle"  ng-if="response4 == '4'">
+				   {{response5}}
+				</label>
+				
+				<label class="toggle"  ng-if="response4 == '5'">
+				   <img class="title" ng-if="response5 == 'UnOccupied'" src="images/sensoricon/unoccupied.png">
+				   <img class="title" ng-if="response5 != 'UnOccupied'" src="images/sensoricon/occupied.png">
+				</label>
+			</label>
+		</div>
+	  </ion-content>
+	</ion-view>
+	</script> 
+    
+    <div class="bar bar-footer bar-dark" style="height:15px;">
+  		<!--<div class="title">My Program</div>-->
+	</div>
+<script>
+angular.module('ionicApp', ['ionic'])
+
+.config(function($stateProvider, $urlRouterProvider) {
+
+  $stateProvider
+   .state('signin', {
+      url: "/sign-in",
+      templateUrl: "sign-in.html",
+      controller: 'SignInCtrl'
+    })
+    .state('forgotpassword', {
+      url: "/forgot-password",
+      templateUrl: "forgot-password.html"
+    })
+    .state('eventmenu', {
+      url: "/event",
+      abstract: true,
+      templateUrl: "templates/event-menu.html"
+    })
+    .state('eventmenu.home', {
+      url: "/home",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/home.html"
+        }
+      }
+    })
+    .state('eventmenu.checkin', {
+      url: "/check-in",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/check-in.html",
+          controller: "CheckinCtrl"
+        }
+      }
+    })
+	 .state('eventmenu.messages', {
+      url: "/messages",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/messages.html",
+        }
+      }
+    })
+	 .state('eventmenu.receive', {
+      url: "/receive",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/receive.html",
+		  controller: "receiveCtrl"
+        }
+      }
+    })
+	 .state('eventmenu.sent', {
+      url: "/sent",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/sent.html",
+		  controller: "sentCtrl"
+        }
+      }
+    })
+    .state('eventmenu.attendees', {
+      url: "/attendees",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/attendees.html",
+          controller: "MyCtrl1"
+        }
+      }
+    })
+	.state('eventmenu.detail', {
+    url: "/detail/:sensor_id?sensor_type?sensor_name?schedule_name?sensor_type_id?sensor_status",
+    views: {
+      'menuContent': {
+        controller:'DetailCtrl',
+        templateUrl: "templates/detail.html"
+      }
+    }
+  })
+  
+  $urlRouterProvider.otherwise("/sign-in");
+})
+
+.controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
+  $scope.attendees = [
+    { firstname: 'Nicolas', lastname: 'Cage' },
+    { firstname: 'Jean-Claude', lastname: 'Van Damme' },
+    { firstname: 'Keanu', lastname: 'Reeves' },
+    { firstname: 'Steven', lastname: 'Seagal' }
+  ];
+  
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+})
+
+
+.controller('SignInCtrl', function($scope,$state,$http,$ionicPopup) {
+	$scope.user = {
+		username: '',
+		password : ''
+  	};
+	$scope.signIn = function(user) {
+		var username = user.username;
+		var password = user.password;
+		
+		if(typeof username === "undefined" || typeof password === "undefined" || username == "" || password == ""){
+			$ionicPopup.show({
+			  template: '',
+			  title: 'Please fill all fields',
+			  scope: $scope,
+			  buttons: [
+				{ 
+				  text: 'Ok',
+				  type: 'button-assertive'
+				},
+			  ]
+			})
+		}
+		else{
+			var data_parameters = "username="+username+ "&password="+password;
+			$http.post("http://50.116.21.72:1837/userauth",data_parameters, {
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+			})
+			.success(function(response) {
+				if(response[0].status == "Y"){
+					$state.go('eventmenu.checkin');
+				}
+				else{
+					$ionicPopup.show({
+              		  template: '',
+					  title: 'Username or password is wrong',
+					  scope: $scope,
+					  buttons: [
+						{ 
+						  text: 'Ok',
+						  type: 'button-assertive'
+						},
+					  ]
+              		})
+				}
+			});
+		}
+	};
+})
+
+.controller('receiveCtrl', function($scope,$http,$ionicModal, $ionicScrollDelegate) {
+  	var slocid = "1";
+	var orgid = "1";
+	var thermid = "3"
+	var searchtext = "NA";
+	$scope.numberOfItemsToDisplay = 20; // number of item to load each time
+	var pagecount = $scope.numberOfItemsToDisplay;
+	var pagenum = 1;
+	var userid = 1;
+	var thermid = "3";
+	var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&userid="+userid+ "&pagenum="+pagenum+ "&pagecount="+pagecount+ "&searchtext="+searchtext+ "&thermid="+thermid;
+	$http.post("http://50.116.21.72:1837/get_inbox",data_parameters, {
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+	})
+	.success(function(response){
+		if(response[0].status != "N")$scope.response = response;
+		else $scope.response = "City";
+	});
+	$scope.scrollBottom = function() {
+   	 	$ionicScrollDelegate.scrollBottom(true);
+  	};
+	
+	
+	$scope.loadMore = function() {
+    console.log('Loading more!');
+    $timeout(function() {
+			 var slocid = "1";
+			var orgid = "1";
+			var thermid = "3"
+			var searchtext = "NA";
+			$scope.numberOfItemsToDisplay = 20; // number of item to load each time
+			var pagecount = $scope.numberOfItemsToDisplay;
+			var pagenum = 1;
+			var userid = 1;
+			var thermid = "3";
+			var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&userid="+userid+ "&pagenum="+pagenum+ "&pagecount="+pagecount+ "&searchtext="+searchtext+ "&thermid="+thermid;
+			$http.post("http://50.116.21.72:1837/get_inbox",data_parameters, {
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+			})
+			.success(function(response){
+				if(response[0].status != "N")$scope.response = response;
+				else $scope.response = "City";
+			});
+
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+            $scope.$broadcast('scroll.resize');
+      $scope.$broadcast('scroll.resize')
+    }, 1000);
+  }
+})
+
+.controller('sentCtrl', function($scope,$http,$ionicModal, $ionicScrollDelegate) {
+  	var slocid = "1";
+	var orgid = "1";
+	var thermid = "3"
+	var searchtext = "NA";
+	$scope.numberOfItemsToDisplay = 20; // number of item to load each time
+	var pagecount = $scope.numberOfItemsToDisplay;
+	var pagenum = 1;
+	var userid = 1;
+	var thermid = "3";
+	
+	var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&userid="+userid+ "&pagenum="+pagenum+ "&pagecount="+pagecount+ "&searchtext="+searchtext;
+	$http.post("http://50.116.21.72:1837/get_sent",data_parameters, {
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+	})
+	.success(function(response){
+		if(response[0].status != "N")$scope.response = response;
+		else $scope.response = "City";
+	});
+	$scope.scrollBottom = function() {
+   	 	$ionicScrollDelegate.scrollBottom(true);
+  	};
+})
+
+.controller('MyCtrl1', function($scope,$http,$ionicModal) {
+  	var slocid = "1";
+	var orgid = "1";
+	var thermid = "3";
+  	var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid;
+	$http.post("http://50.116.21.72:1837/get_root_control",data_parameters, {
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+	})
+	.success(function(response) {
+		if(response[0].status != "N")$scope.response = response;
+		else $scope.response = "City";
+	});
+  	/*
+	* if given group is the selected group, deselect it
+	* else, select the given group
+	*/
+	$scope.doRefresh = function() {
+    	console.log('Refreshing!');
+		var slocid = "1";
+		var orgid = "1";
+		var thermid = "3"
+		var data_parameters = "slocid="+slocid+ "&orgid="+orgid+ "&thermid="+thermid;
+		$http.post("http://50.116.21.72:1837/get_root_control",data_parameters, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+		})
+		.success(function(response) {
+			if(response[0].status != "N")$scope.response = response;
+			else $scope.response = "City";
+			$scope.$broadcast('scroll.refreshComplete');
+		});
+		
+	};
+	
+	$scope.toggleGroup = function(group) {
+	if ($scope.isGroupShown(group)) {
+	  $scope.shownGroup = null;
+	} else {
+	  $scope.shownGroup = group;
+	}
+	};
+	$scope.isGroupShown = function(group) {
+	return $scope.shownGroup === group;
+	};
+	
+})
+
+.controller('DetailCtrl', function($scope, $stateParams) {
+	console.log($stateParams.sensor_type);
+  	$scope.response = $stateParams.sensor_id;
+	$scope.response1 = $stateParams.sensor_type;
+	$scope.response2 = $stateParams.sensor_name;
+	$scope.response3 = $stateParams.schedule_name; 
+	$scope.response4 = $stateParams.sensor_type_id;
+	$scope.response5 = $stateParams.sensor_status;
+})
+
+.controller('CheckinCtrl', function($scope) {
+  $scope.showForm = true;
+  
+  $scope.shirtSizes = [
+    { text: 'Large', value: 'L' },
+    { text: 'Medium', value: 'M' },
+    { text: 'Small', value: 'S' }
+  ];
+  
+  $scope.attendee = {};
+  $scope.submit = function() {
+    if(!$scope.attendee.firstname) {
+      alert('Info required');
+      return;
+    }
+    $scope.showForm = false;
+    $scope.attendees.push($scope.attendee);
+  };
+  
+})
+
+.controller('AttendeesCtrl', function($scope) {
+  $scope.activity = [];
+  $scope.arrivedChange = function(attendee) {
+    var msg = attendee.firstname + ' ' + attendee.lastname;
+    msg += (!attendee.arrived ? ' has arrived, ' : ' just left, '); 
+    msg += new Date().getMilliseconds();
+    $scope.activity.push(msg);
+    if($scope.activity.length > 3) {
+      $scope.activity.splice(0, 1);
+    }
+  };
+  
+});
+</script>
+  </body>
+</html>
